@@ -1,0 +1,16 @@
+{
+  "name": "ipa-bundler",
+  "version": "1.0.0",
+  "description": "Generates the files to download an AdHoc IPA from an iOS device",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "tsc -p ."
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^17.0.21",
+    "typescript": "^4.6.2"
+  }
+}
