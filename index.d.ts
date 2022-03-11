@@ -13,10 +13,7 @@ declare type AppDetails = {
     appIcon: Buffer;
 };
 declare type ReqOptions = {
-    /**
-    * Absolute url, or relative to manifest file (and html file)
-    */
-    ipaUrl: string;
+    baseURL: string;
 } & (AppDetails | {
     ipaPath: string;
 });
@@ -26,6 +23,6 @@ export declare function createBundle(inputOptions: InputOptions): Promise<{
 }>;
 export declare function writeBundle(inputOptions: InputOptions): Promise<any[]>;
 export declare function link(manifest: string): string;
-export declare function html(manifest: string, options: AppDetails): string;
+export declare function html(manifestUrl: string, options: AppDetails): string;
 export declare function manifest(ipaUrl: string, options: AppDetails): string;
 export {};

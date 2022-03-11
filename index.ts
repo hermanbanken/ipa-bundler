@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 import { iOS, iOSInformation } from "app-bundle-info";
-import { write } from "fs";
+import { basename } from "path";
 
 type OptOptions = {
   outDir: string;
@@ -17,21 +17,18 @@ type AppDetails = {
 };
 
 type ReqOptions = {
-  /**
-  * Absolute url, or relative to manifest file (and html file)
-  */
-  ipaUrl: string;
+  baseURL: string;
 } & (AppDetails | { ipaPath: string });
 
 type Options = ReqOptions & OptOptions;
 type InputOptions = ReqOptions & Partial<OptOptions>;
 
 if (require.main === module) {
-  const [ipaPath] = process.argv.slice(2);
-  if (!ipaPath) {
-    console.log("Usage: ipa-bundler <ipa-file>");
+  const [ipaPath, baseURL] = process.argv.slice(2);
+  if (!ipaPath || !baseURL) {
+    console.log("Usage: ipa-bundler <ipa-file> <baseurl>");
   } else {
-    writeBundle({ ipaPath: ipaPath, ipaUrl: ipaPath }).catch(console.error);
+    writeBundle({ ipaPath: ipaPath, baseURL: baseURL }).catch(console.error);
   }
 }
 
@@ -45,6 +42,9 @@ export async function createBundle(inputOptions: InputOptions) {
     htmlFile: "index.html",
     manifestFile: "manifest.plist",
   }, inputOptions);
+
+  const manifestUrl = new URL(basename(options.manifestFile), options.baseURL).toString();
+  const ipaUrl = new URL(basename(options.manifestFile), options.baseURL).toString();
 
   if (hasIpaPath(options)) {
     const { createReadStream } = await import("fs");
@@ -64,13 +64,13 @@ export async function createBundle(inputOptions: InputOptions) {
       appIcon: await parseImage(bundle),
     });
     return {
-      [options.htmlFile]: html(options.manifestFile, appDetails),
-      [options.manifestFile]: manifest(options.ipaUrl, appDetails),
+      [options.htmlFile]: html(manifestUrl, appDetails),
+      [options.manifestFile]: manifest(ipaUrl, appDetails),
     };
   }
   return {
-    [options.htmlFile]: html(options.manifestFile, options),
-    [options.manifestFile]: manifest(options.ipaUrl, options),
+    [options.htmlFile]: html(manifestUrl, options),
+    [options.manifestFile]: manifest(ipaUrl, options),
   };
 }
 
@@ -85,10 +85,10 @@ export function link(manifest: string ) {
   return `itms-services://?action=download-manifest&url=${encodeURIComponent(manifest)}`
 }
 
-export function html(manifest: string, options: AppDetails) {
+export function html(manifestUrl: string, options: AppDetails) {
   const maybeImage = options.appIcon ? `<img width=200 height=200 src="data:image/${extension(options.appIcon)};base64,${options.appIcon.toString("base64")}" /> ` : "";
   return `
-<a href="${link(manifest)}">
+<a href="${link(manifestUrl)}">
   ${maybeImage}
   <span class="caption">Install <span class="title">${options.appTitle}</span> (${options.bundleMarketingVersion} / ${options.bundleVersion})</span>
 </a>`.trim();

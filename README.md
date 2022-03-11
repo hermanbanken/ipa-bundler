@@ -10,11 +10,12 @@ const opts = {
     appTitle: "Foo",
     bundleVersion: "1.0.0",
     bundleIdentifier: "com.example",
+    baseURL: "https://example.com/v1.0.0/",
 };
-await writeBundle(relativeIpaUrl, opts);
+await writeBundle(opts);
 
 // or with extra options:
-await writeBundle(relativeIpaUrl, {
+await writeBundle({
     ...opts,
     outDir: "public",
 });
@@ -24,6 +25,7 @@ await writeBundle(relativeIpaUrl, {
 
 |- Option -|- Description -|- Default -|
 |----------|---------------|-----------|
+| baseURL | Where the files will be hosted (ipa & manifest) | required! |
 | outDir | Where to write the html and manifest files | . |
 | htmlFile | How to name the html file, relative to outDir | index.html |
 | manifestFile | How to name the manifest file, relative to outDir | manifest.plist |
