@@ -86,7 +86,7 @@ export function link(manifest: string ) {
 }
 
 export function html(manifest: string, options: AppDetails) {
-  const maybeImage = options.appIcon ? `<img width=200 height=200 src="data:image/png;base64,${options.appIcon.toString("base64url")}" /> ` : "";
+  const maybeImage = options.appIcon ? `<img width=200 height=200 src="data:image/${extension(options.appIcon)};base64,${options.appIcon.toString("base64url")}" /> ` : "";
   return `
 <a href="${link(manifest)}">
   ${maybeImage}
@@ -139,4 +139,13 @@ function parseImage(bundle: iOS) {
     iconStream.on('data', (d) => bufs.push(d));
     iconStream.on('end', () => resolve(Buffer.concat(bufs)));
   }));
+}
+
+// https://stackoverflow.com/questions/27886677/javascript-get-extension-from-base64-image
+function extension(buf: Buffer) {
+  switch (buf.slice(0, 2).toString("hex")) {
+      case "ffd8": return "jpg";
+      case "8950": return "png";
+      default: return "png" // probably not ideal
+  }
 }
