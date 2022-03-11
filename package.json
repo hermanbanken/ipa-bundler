@@ -15,7 +15,8 @@
     "typescript": "^4.6.2"
   },
   "bin": {
-    "ipa-bundler": "index.js"
+    "ipa-bundler": "index.js",
+    "qr": "qr.js"
   },
   "optionalDependencies": {
     "app-bundle-info": "^0.2.2"

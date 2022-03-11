@@ -33,5 +33,12 @@ await writeBundle({
 | bundleIdentifier | Which identifier the IPA uses | com.example |
 | appTitle | Which title the IPA uses | MyApp |
 
+## Extra goodies
+
+```bash
+$ qr https://example.org 150
+// https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fexample.org
+```
+
 ## References
 1. https://stackoverflow.com/questions/23561370/download-and-install-an-ipa-from-self-hosted-url-on-ios

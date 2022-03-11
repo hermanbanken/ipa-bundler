@@ -27,6 +27,7 @@ if (require.main === module) {
   const [ipaPath, baseURL] = process.argv.slice(2);
   if (!ipaPath || !baseURL) {
     console.log("Usage: ipa-bundler <ipa-file> <baseurl>");
+    process.exit(1);
   } else {
     writeBundle({ ipaPath: ipaPath, baseURL: baseURL }).catch(console.error);
   }
