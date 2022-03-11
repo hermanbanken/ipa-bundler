@@ -1,6 +1,6 @@
 {
   "name": "ipa-bundler",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Generates the files to download an AdHoc IPA from an iOS device",
   "main": "index.js",
   "types": "index.d.ts",
